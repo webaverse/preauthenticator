@@ -1,4 +1,4 @@
-const endpointUrl = 'https://local.webaverse.com/preauthenticator/';
+const endpointUrl = 'https://webaverse.github.io/preauthenticator/';
 
 export const connect = async () => {
   const iframe = document.createElement('iframe');
