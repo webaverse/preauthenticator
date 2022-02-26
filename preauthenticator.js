@@ -18,6 +18,7 @@ export const connect = async () => {
     iframe.addEventListener('error', err => {
       reject(err);
     });
+    iframe.crossOrigin = 'Anonymous';
     iframe.src = endpointUrl;
     iframe.style.display = 'none';
     document.body.appendChild(iframe);
