@@ -3,7 +3,6 @@ const _getKey = k => window.parent.location.origin + ':' + k;
 const messageChannel = new MessageChannel();
 const port = messageChannel.port1;
 port.addEventListener('message', async e => {
-  // console.log('frame got message', e);
   const {method, data} = e.data;
   
   const _jsonParse = s => {
@@ -24,11 +23,6 @@ port.addEventListener('message', async e => {
       const s = localStorage.getItem(k);
       const o = _jsonParse(s);
       if (o) {
-        /* const u = new URL(o.url);
-        for (const k in query) {
-          const v = query[k];
-          u.searchParams.set(k, v);
-        }; */
         const res = await fetch(o.url, {
           method: 'POST',
           headers: {
@@ -38,7 +32,6 @@ port.addEventListener('message', async e => {
           body: JSON.stringify(query),
         });
         const j = await res.json();
-        // console.log('got response', j);
         _respond(j);
       } else {
         console.warn('no registered api', name);

@@ -2,14 +2,10 @@ const endpointUrl = 'https://local.webaverse.com/preauthenticator/';
 
 export const connect = async () => {
   const iframe = document.createElement('iframe');
-  // const messageChannel = new MessageChannel();
   const p = new Promise((accept, reject) => {
     iframe.addEventListener('load', () => {
-      // console.log('iframe loaded');
-      
       const message = e => {
         const {kvsInit} = e.data;
-        // console.log('got message data', e.data);
         if (kvsInit) {
           const {port} = e.data;
           accept(port);
@@ -19,9 +15,6 @@ export const connect = async () => {
       };
       window.addEventListener('message', message);
     });
-    /* iframe.contentWindow.addEventListener('message', e => {
-      console.log('pre load message', e.data);
-    }); */
     iframe.addEventListener('error', err => {
       reject(err);
     });
@@ -30,14 +23,11 @@ export const connect = async () => {
     document.body.appendChild(iframe);
   });
   const port = await p;
-  // console.log('got port', port);
   port.request = function(req) {
     return new Promise((accept, reject) => {
       port.addEventListener('message', e => {
-        // console.log('got respone', e);
         accept(e.data);
       }, {once: true});
-      // console.log('post req', req);
       port.postMessage(req);
     });
   };
@@ -85,14 +75,5 @@ export const connect = async () => {
   };
   port.start();
 
-  /* const req = {
-    method: 'set',
-    data: {
-      key: 'lol',
-      value: 'zol',
-    }
-  };
-  const res = await port.request(req);
-  console.log('got response', req, res); */
   return port;
 };
