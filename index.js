@@ -1,4 +1,5 @@
-const _getKey = k => window.parent.location.origin + ':' + k;
+const parentUrl = document.referrer;
+const _getKey = k => parentUrl + ':' + k;
 
 const messageChannel = new MessageChannel();
 const port = messageChannel.port1;
