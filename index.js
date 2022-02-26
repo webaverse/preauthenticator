@@ -19,31 +19,39 @@ port.addEventListener('message', async e => {
   
   switch (method) {
     case 'callAuthenticatedApi': {
-      const {name, query} = data;
+      const {name, url, query} = data;
       const k = _getKey(name);
       const s = localStorage.getItem(k);
       const o = _jsonParse(s);
       if (o) {
-        const res = await fetch(o.url, {
-          method: 'POST',
-          headers: {
-            'Authorization': o.authorization,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(query),
-        });
-        const j = await res.json();
-        _respond(j);
+        const storedOrigin = o.origin;
+        const requestUrl = new URL(url);
+        if (storedOrigin === requestUrl.origin) {
+          const res = await fetch(requestUrl, {
+            method: 'POST',
+            headers: {
+              'Authorization': o.authorization,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(query),
+          });
+          const j = await res.json();
+          _respond(j);
+        } else {
+          _respond({
+            error: 'origin mismatch: ' + storedOrigin + ' != ' + requestUrl.origin,
+          });
+        }
       } else {
         console.warn('no registered api', name);
       }
       break;
     }
     case 'setAuthenticatedApi': {
-      const {name, url, authorization} = data;
+      const {name, origin, authorization} = data;
       const k = _getKey(name);
       localStorage.setItem(k, JSON.stringify({
-        url,
+        origin,
         authorization,
       }));
       _respond({
