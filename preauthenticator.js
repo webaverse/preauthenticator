@@ -1,4 +1,4 @@
-const endpointUrl = 'https://local.webaverse.com/key-value-store/';
+const endpointUrl = 'https://local.webaverse.com/preauthenticator/';
 
 export const connect = async () => {
   const iframe = document.createElement('iframe');
@@ -41,28 +41,39 @@ export const connect = async () => {
       port.postMessage(req);
     });
   };
-  port.get = async key => {
+  port.callAuthenticatedApi = async (name, query) => {
     const res = await port.request({
-      method: 'get',
+      method: 'callAuthenticatedApi',
       data: {
-        key,
+        name,
+        query,
       },
     });
-    const {value} = res;
-    return value;
+    return res;
   };
-  port.set = async (key, value) => {
+  port.setAuthenticatedApi = async (name, url, authorization) => {
     const res = await port.request({
-      method: 'set',
+      method: 'setAuthenticatedApi',
       data: {
-        key,
-        value,
+        name,
+        url,
+        authorization,
       },
     });
     const {ok} = res;
     return ok;
   };
-  port.delete = async key => {
+  port.hasAuthenticatedApi = async name => {
+    const res = await port.request({
+      method: 'hasAuthenticatedApi',
+      data: {
+        name,
+      },
+    });
+    const {has} = res;
+    return has;
+  };
+  port.deleteAuthenticatedApi = async key => {
     const res = await port.request({
       method: 'delete',
       data: {
