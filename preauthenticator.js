@@ -43,12 +43,12 @@ export const connect = async () => {
     });
     return res;
   };
-  port.setAuthenticatedApi = async (name, url, authorization) => {
+  port.setAuthenticatedApi = async (name, origin, authorization) => {
     const res = await port.request({
       method: 'setAuthenticatedApi',
       data: {
         name,
-        url,
+        origin,
         authorization,
       },
     });
