@@ -32,11 +32,12 @@ export const connect = async () => {
       port.postMessage(req);
     });
   };
-  port.callAuthenticatedApi = async (name, query) => {
+  port.callAuthenticatedApi = async (name, url, query) => {
     const res = await port.request({
       method: 'callAuthenticatedApi',
       data: {
         name,
+        url,
         query,
       },
     });
