@@ -69,7 +69,7 @@ port.addEventListener('message', async e => {
       });
       break;
     }
-    case 'deleteAuthentictedApi': {
+    case 'deleteAuthenticatedApi': {
       const {key} = data;
       const k = _getKey(key);
       const deleted = localStorage.removeItem(k);
