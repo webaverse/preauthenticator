@@ -67,7 +67,7 @@ export const connect = async () => {
   };
   port.deleteAuthenticatedApi = async key => {
     const res = await port.request({
-      method: 'delete',
+      method: 'deleteAuthenticatedApi',
       data: {
         key,
       },
